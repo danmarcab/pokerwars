@@ -15,40 +15,40 @@ defmodule Pokerwars.Hand do
     evaluate_straight(cards)
   end
 
-  defp evaluate([%{rank: a}, %{rank: a}, %{rank: a}, %{rank: a}, %{rank: _}]), do: :four_of_a_kind
-  defp evaluate([%{rank: _}, %{rank: a}, %{rank: a}, %{rank: a}, %{rank: a}]), do: :four_of_a_kind
+  defp evaluate([%{rank: a}, %{rank: a}, %{rank: a}, %{rank: a}, %{rank: _}]), do: {:four_of_a_kind, a}
+  defp evaluate([%{rank: _}, %{rank: a}, %{rank: a}, %{rank: a}, %{rank: a}]), do: {:four_of_a_kind, a}
 
-  defp evaluate([%{rank: a}, %{rank: a}, %{rank: a}, %{rank: b}, %{rank: b}]), do: :full_house
-  defp evaluate([%{rank: b}, %{rank: b}, %{rank: a}, %{rank: a}, %{rank: a}]), do: :full_house
+  defp evaluate([%{rank: a}, %{rank: a}, %{rank: a}, %{rank: b}, %{rank: b}]), do: {:full_house, {a, b}}
+  defp evaluate([%{rank: b}, %{rank: b}, %{rank: a}, %{rank: a}, %{rank: a}]), do: {:full_house, {a, b}}
 
-  defp evaluate([%{suit: a}, %{suit: a}, %{suit: a}, %{suit: a}, %{suit: a}]), do: :flush
+  defp evaluate([%{suit: a, rank: r1}, %{suit: a, rank: r2}, %{suit: a, rank: r3}, %{suit: a, rank: r4}, %{suit: a, rank: r5}]), do: {:flush, {r5, r4, r3, r2, r1}}
 
-  defp evaluate([%{rank: a}, %{rank: a}, %{rank: a}, %{rank: _}, %{rank: _}]), do: :three_of_a_kind
-  defp evaluate([%{rank: _}, %{rank: a}, %{rank: a}, %{rank: a}, %{rank: _}]), do: :three_of_a_kind
-  defp evaluate([%{rank: _}, %{rank: _}, %{rank: a}, %{rank: a}, %{rank: a}]), do: :three_of_a_kind
+  defp evaluate([%{rank: t}, %{rank: t}, %{rank: t}, %{rank: _}, %{rank: _}]), do: {:three_of_a_kind, t}
+  defp evaluate([%{rank: _}, %{rank: t}, %{rank: t}, %{rank: t}, %{rank: _}]), do: {:three_of_a_kind, t}
+  defp evaluate([%{rank: _}, %{rank: _}, %{rank: t}, %{rank: t}, %{rank: t}]), do: {:three_of_a_kind, t}
 
-  defp evaluate([%{rank: a}, %{rank: a}, %{rank: b}, %{rank: b}, %{rank: _}]), do: :two_pairs
-  defp evaluate([%{rank: a}, %{rank: a}, %{rank: _}, %{rank: b}, %{rank: b}]), do: :two_pairs
-  defp evaluate([%{rank: _}, %{rank: a}, %{rank: a}, %{rank: b}, %{rank: b}]), do: :two_pairs
+  defp evaluate([%{rank: p1}, %{rank: p1}, %{rank: p2}, %{rank: p2}, %{rank: r1}]), do: {:two_pairs, {p2, p1, r1}}
+  defp evaluate([%{rank: p1}, %{rank: p1}, %{rank: r1}, %{rank: p2}, %{rank: p2}]), do: {:two_pairs, {p2, p1, r1}}
+  defp evaluate([%{rank: r1}, %{rank: p1}, %{rank: p1}, %{rank: p2}, %{rank: p2}]), do: {:two_pairs, {p2, p1, r1}}
 
-  defp evaluate([%{rank: a}, %{rank: a}, %{rank: _}, %{rank: _}, %{rank: _}]), do: :pair
-  defp evaluate([%{rank: _}, %{rank: a}, %{rank: a}, %{rank: _}, %{rank: _}]), do: :pair
-  defp evaluate([%{rank: _}, %{rank: _}, %{rank: a}, %{rank: a}, %{rank: _}]), do: :pair
-  defp evaluate([%{rank: _}, %{rank: _}, %{rank: _}, %{rank: a}, %{rank: a}]), do: :pair
+  defp evaluate([%{rank: p}, %{rank: p}, %{rank: r1}, %{rank: r2}, %{rank: r3}]), do: {:pair, {p, r3, r2, r1}}
+  defp evaluate([%{rank: r1}, %{rank: p}, %{rank: p}, %{rank: r2}, %{rank: r3}]), do: {:pair, {p, r3, r2, r1}}
+  defp evaluate([%{rank: r1}, %{rank: r2}, %{rank: p}, %{rank: p}, %{rank: r3}]), do: {:pair, {p, r3, r2, r1}}
+  defp evaluate([%{rank: r1}, %{rank: r2}, %{rank: r3}, %{rank: p}, %{rank: p}]), do: {:pair, {p, r3, r2, r1}}
 
-  defp evaluate(_), do: :high_card
+  defp evaluate([%{rank: r1}, %{rank: r2}, %{rank: r3}, %{rank: r4}, %{rank: r5}]), do: {:high_card, {r5, r4, r3, r2, r1}}
 
 
   defp evaluate_straight([%{suit: a}, %{suit: a}, %{suit: a}, %{suit: a}, %{suit: a, rank: 14}]) do
-    :royal_flush
+    {:royal_flush, {}}
   end
 
-  defp evaluate_straight([%{suit: a}, %{suit: a}, %{suit: a}, %{suit: a}, %{suit: a}]) do
-    :straight_flush
+  defp evaluate_straight([%{suit: a}, %{suit: a}, %{suit: a}, %{suit: a}, %{suit: a, rank: r}]) do
+    {:straight_flush, r}
   end
 
-  defp evaluate_straight(_) do
-    :straight
+  defp evaluate_straight([%{rank: _}, %{rank: _}, %{rank: _}, %{rank: _}, %{rank: r}]) do
+    {:straight, r}
   end
 
 end

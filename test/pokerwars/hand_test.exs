@@ -13,7 +13,7 @@ defmodule Pokerwars.HandTest do
       %Card{rank: 14, suit: :hearts}
     ]
 
-    assert Hand.score(cards) == :royal_flush
+    assert Hand.score(cards) == {:royal_flush, {}}
   end
 
   test "evaluates royal flush of spades" do
@@ -25,7 +25,7 @@ defmodule Pokerwars.HandTest do
       %Card{rank: 14, suit: :spades}
     ]
 
-    assert Hand.score(cards) == :royal_flush
+    assert Hand.score(cards) == {:royal_flush, {}}
   end
 
   test "evaluates straight flush of spades" do
@@ -49,7 +49,7 @@ defmodule Pokerwars.HandTest do
       %Card{rank: 9, suit: :spades}
     ]
 
-    assert Hand.score(cards) == {:flush, 13, 11, 9, 8, 2}
+    assert Hand.score(cards) == {:flush, {13, 11, 9, 8, 2}}
   end
 
   test "evaluates three of a kind" do
@@ -73,7 +73,7 @@ defmodule Pokerwars.HandTest do
       %Card{rank: 9, suit: :spades}
     ]
 
-    assert Hand.score(cards) == {:two_pairs, 11, 9, 13}
+    assert Hand.score(cards) == {:two_pairs, {11, 9, 13}}
   end
 
   test "evaluates pair" do
@@ -85,7 +85,7 @@ defmodule Pokerwars.HandTest do
       %Card{rank: 9, suit: :spades}
     ]
 
-    assert Hand.score(cards) == {:pair, 9, 13, 11, 10}
+    assert Hand.score(cards) == {:pair, {9, 13, 11, 10}}
   end
 
   test "evaluates straight for mismatching suits" do
@@ -109,7 +109,7 @@ defmodule Pokerwars.HandTest do
       %Card{rank: 11, suit: :spades}
     ]
 
-    assert Hand.score(cards) == {:high_card, 11, 7, 5, 3, 2}
+    assert Hand.score(cards) == {:high_card, {11, 7, 5, 3, 2}}
   end
 
   test "evaluates poker" do
@@ -133,7 +133,7 @@ defmodule Pokerwars.HandTest do
       %Card{rank: 5, suit: :clubs}
     ]
 
-    assert Hand.score(cards) == {:full_house, 5, 7}
+    assert Hand.score(cards) == {:full_house, {5, 7}}
   end
 
 end
